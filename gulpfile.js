@@ -18,7 +18,8 @@ var server = require('gulp-server-livereload');
 
 var config = {
   isWatching: false,
-  port: gutil.env.port !== undefined ? gutil.env.port : 8000
+  port: gutil.env.port !== undefined ? gutil.env.port : 8000,
+  isProduction: true
 };
 
 function src() {
@@ -87,15 +88,15 @@ function browserifyTask(entry, out, cb) {
     entries: [entry],
     extensions: ['.js', '.jsx'],
     cache: {},
-    debug: true,
+    debug: !config.isProduction,
     packageCache: {},
-    fullPaths: true
+    fullPaths: !config.isProduction
   })
   .transform(babelify.configure({
     presets: ["es2015", "react", "stage-1"]
   }))
   .transform('glslify')
-  .transform({ global: true }, gutil.noop);
+  .transform({ global: true }, config.isProduction ? 'uglifyify' : gutil.noop);
 
   if (config.isWatching) {
     bundler = watchify(bundler);
@@ -135,7 +136,7 @@ gulp.task('watch', function() {
   gulp.watch(path.join(src(), 'scss/**/*.scss'), ['sass']);
   gulp.start('browserify');
 });
- 
+
 gulp.task('webserver', function() {
   gulp.src('./')
     .pipe(server({

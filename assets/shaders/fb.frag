@@ -12,10 +12,10 @@ void main(){
 	float t = time;
 	t = mod(t, 59400.0);
 	vec4 tex = texture2D(texture, vUv);
-	vec3 random = vec3(rand(0.1+vUv+t*0.01), rand(0.1+vUv+t*0.01), rand(0.1+vUv+t*0.01));
+	// vec3 random = vec3(rand(0.1+vUv+t*0.01), rand(0.1+vUv+t*0.01), rand(0.1+vUv+t*0.01));
 	// tex.rgb += 0.01;
 	// tex.rgb = mod(tex.rgb, vec3(1.0));
-	gl_FragColor = mix(vec4(random,1.0), tex+vec4(random,1.0)*0.05, clamp(t, 0.0,1.0));//tex;
+	gl_FragColor =tex;// mix(vec4(random,1.0), tex+vec4(random,1.0)*0.05, clamp(t, 0.0,1.0));//tex;
 	gl_FragColor.a = 1.0;
 
 }
